@@ -1,17 +1,27 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #000;
+}
+
+body {
+    background-color: #000;
+    color: #fff;
+}
+
 /* ---- Heder ---- */
 .header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    background: #fff;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     transition: height 0.2s ease-out;
     padding: 0;
-    background-color: #fff;
 }
 
 /* ---- Logo ---- */
@@ -42,7 +52,7 @@
 
 .navbar-center ul li a {
     text-decoration: none;
-    color: black;
+    color: white;
     font-weight: 500;
 }
 
