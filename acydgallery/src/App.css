@@ -1,5 +1,11 @@
 .App {
   text-align: center;
+  min-height: 100vh;
+  transition: background-color 0.3s;
+}
+
+body.dark-mode .App {
+  background-color: #000;
 }
 
 .App-logo {

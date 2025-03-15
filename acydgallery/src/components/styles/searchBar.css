@@ -1,0 +1,119 @@
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+}
+
+.search-toggle {
+  background: none;
+  border: none;
+  color: #e0e0e0;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.1);
+  width: 40px;
+  height: 40px;
+  z-index: 2;
+}
+
+.search-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.search-form {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(145deg, #1a1a1a, #222);
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  width: 0;
+  opacity: 0;
+  transition: all 0.3s ease;
+  border: 1px solid #333;
+  height: 40px;
+}
+
+.expanded .search-form {
+  width: 300px;
+  opacity: 1;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  padding: 10px 15px;
+  color: #e0e0e0;
+  font-size: 0.9rem;
+  width: 100%;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: #888;
+}
+
+.clear-search,
+.submit-search {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 0 10px;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.clear-search:hover,
+.submit-search:hover {
+  color: #e0e0e0;
+}
+
+.submit-search {
+  background: linear-gradient(90deg, #333, #444);
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 30px 30px 0;
+}
+
+.submit-search:hover {
+  background: linear-gradient(90deg, #444, #555);
+}
+
+/* Metallic effect */
+.search-form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .expanded .search-form {
+    width: 250px;
+  }
+}
+
+@media (max-width: 576px) {
+  .expanded .search-form {
+    width: 200px;
+  }
+} 

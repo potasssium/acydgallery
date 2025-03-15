@@ -1,0 +1,52 @@
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f8f8;
+  padding: 20px;
+}
+
+body.dark-mode .login-page {
+  background-color: #121212;
+}
+
+.login-page-container {
+  width: 100%;
+  max-width: 500px;
+}
+
+/* Override the login overlay styles for the page version */
+.login-page .login-overlay {
+  position: relative;
+  background-color: transparent;
+  height: auto;
+  animation: none;
+}
+
+.login-page .login-container {
+  animation: fadeIn 0.5s ease;
+  max-height: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .login-page {
+    padding: 10px;
+  }
+  
+  .login-page-container {
+    max-width: 100%;
+  }
+} 

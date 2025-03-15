@@ -2,15 +2,42 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #000;
 }
 
 body {
+    background-color: #fff;
+    color: #000;
+    font-family: 'Arial', sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Remove the universal background color and apply it only where needed */
+.header, 
+.header *, 
+.fixed-navbar, 
+.fixed-navbar * {
+    background-color: transparent;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
     background-color: #000;
     color: #fff;
 }
 
-/* ---- Heder ---- */
+body.dark-mode .navbar-center ul li a,
+body.dark-mode .header-controls button,
+body.dark-mode .currency-toggle select {
+    color: #fff;
+}
+
+body.dark-mode .header-controls button,
+body.dark-mode .currency-toggle select,
+body.dark-mode .theme-toggle button {
+    border-color: #fff;
+}
+
+/* ---- Header ---- */
 .header {
     position: fixed;
     top: 0;
@@ -20,26 +47,34 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    transition: height 0.2s ease-out;
+    transition: all 0.4s cubic-bezier(0.65, 0, 0.35, 1); /* Smooth easing */
     padding: 0;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.header.scrolled {
+    opacity: 0;
+    transform: translateY(-100%);
+    pointer-events: none;
 }
 
 /* ---- Logo ---- */
-
 .logo {
     margin: 0;
     padding: 0;
+    transition: all 0.4s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .logo img.acydgallery {
     height: 20vh;
+    transition: all 0.4s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-
 /* ---- Navbar ---- */
-
 .navbar-center {
     width: 100%;
+    transition: all 0.4s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .navbar-center ul {
@@ -48,22 +83,298 @@ body {
     gap: 45px;
     justify-content: center;
     font-size: 20px;
+    transition: all 0.4s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .navbar-center ul li a {
     text-decoration: none;
-    color: white;
+    color: #000;
     font-weight: 500;
+    transition: color 0.3s;
+}
+
+/* ---- Header Controls ---- */
+.header-controls {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    display: flex;
+    gap: 15px;
+    transition: all 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.header-controls button {
+    background: transparent;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.header-controls button:hover {
+    background-color: rgba(240, 240, 240, 0.5);
+}
+
+.header-controls button i {
+    background-color: transparent;
+}
+
+/* ---- Currency Toggle ---- */
+.currency-toggle {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    display: flex;
+    align-items: center;
+    transition: all 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.currency-toggle select {
+    padding: 8px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.currency-toggle select:hover {
+    background-color: rgba(240, 240, 240, 0.5);
+}
+
+/* ---- Theme Toggle ---- */
+.theme-toggle {
+    position: absolute;
+    top: 20px;
+    left: 120px;
+    display: flex;
+    align-items: center;
+    transition: all 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.theme-toggle button {
+    background: transparent;
+    border: 1px solid #000;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.theme-toggle button:hover {
+    background-color: rgba(240, 240, 240, 0.5);
+}
+
+.theme-toggle button i {
+    background-color: transparent;
+    font-size: 20px;
+}
+
+/* ---- Fixed Navbar ---- */
+.fixed-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #000; /* Black background */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    transform: translateY(-100%);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy effect */
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+}
+
+body.dark-mode .fixed-navbar {
+    background-color: #111; /* Slightly lighter black for dark mode */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.fixed-navbar.visible {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.fixed-navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.fixed-navbar-logo {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    transform: translateY(30px);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-delay: 0.1s;
+}
+
+.fixed-navbar.visible .fixed-navbar-logo {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.fixed-navbar-logo img {
+    height: 40px;
+    transition: all 0.3s ease;
+}
+
+.fixed-navbar-logo:hover img {
+    transform: scale(1.05);
+}
+
+.fixed-navbar-links {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    transform: translateY(30px);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-delay: 0.2s;
+}
+
+.fixed-navbar.visible .fixed-navbar-links {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.fixed-navbar-links ul {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+.fixed-navbar-links ul li a {
+    text-decoration: none;
+    color: #fff; /* White text for black background */
+    font-weight: 500;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.fixed-navbar-links ul li a:hover {
+    color: #ccc; /* Light gray on hover */
+}
+
+.fixed-navbar-links ul li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #fff;
+    transition: width 0.3s ease;
+}
+
+.fixed-navbar-links ul li a:hover::after {
+    width: 100%;
+}
+
+.fixed-navbar-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transform: translateY(30px);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-delay: 0.3s;
+}
+
+.fixed-navbar.visible .fixed-navbar-controls {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.fixed-currency-select {
+    padding: 5px 10px;
+    border: 1px solid #fff; /* White border */
+    border-radius: 5px;
+    background-color: transparent;
+    color: #fff; /* White text */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.fixed-currency-select:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.fixed-theme-toggle {
+    background: transparent;
+    border: 1px solid #fff; /* White border */
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff; /* White icon */
+    transition: all 0.3s ease;
+}
+
+.fixed-theme-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: rotate(30deg);
+}
+
+.fixed-theme-toggle i {
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.fixed-cart-btn {
+    background: transparent;
+    border: 1px solid #fff; /* White border */
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff; /* White icon */
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.fixed-cart-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
+}
+
+.fixed-cart-btn i {
+    font-size: 16px;
+    transition: all 0.3s ease;
 }
 
 /* ---- Gallery ---- */
-
 .gallery {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     width: 100%;
+    margin-top: 50px;
 }
 
 .box {
@@ -74,7 +385,13 @@ body {
     justify-content: center;
     align-content: center;
     position: relative;
-    margin-top: 80vh;
+    margin-top: 30px;
+    border-radius: 0.5em;
+}
+
+.box img {
+    max-width: 100%;
+    max-height: 100%;
     border-radius: 0.5em;
 }
 
@@ -89,13 +406,13 @@ body {
     opacity: 0;
     transition: .5s ease;
     background-color: #008CBA;
-  }
+}
   
-  .gallery:hover .overlay {
+.gallery:hover .overlay {
     opacity: 1;
-  }
+}
   
-  .img-text1 {
+.img-text1 {
     color: white;
     font-size: 20px;
     position: absolute;
@@ -105,4 +422,4 @@ body {
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     text-align: center;
-  }
+}
