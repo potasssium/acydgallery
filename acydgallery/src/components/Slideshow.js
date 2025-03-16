@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { useCart } from '../context/CartContext';
 import './styles/slideshow.css';
 
 const ProductShowcase = () => {
   const scrollContainerRef = useRef(null);
   const [currentCurrency, setCurrentCurrency] = useState('USD');
+  const { dispatch } = useCart();
   
   // Exchange rates (approximate values - in a real app, you would fetch these from an API)
   const exchangeRates = {
@@ -179,6 +183,42 @@ const ProductShowcase = () => {
     };
   }, []);
 
+  // Add to cart function
+  const addToCart = (product) => {
+    // Create a complete product object with all required fields
+    const cartProduct = {
+      id: product.id,
+      name: product.title,
+      price: product.basePrice,
+      image: product.image,
+      category: product.category,
+      // Add any other fields needed for the cart
+      rating: 5,
+      onSale: false
+    };
+
+    dispatch({
+      type: 'ADD_ITEM',
+      payload: cartProduct
+    });
+    
+    // Show a brief notification
+    const notification = document.createElement('div');
+    notification.className = 'add-to-cart-notification';
+    notification.textContent = `${product.title} added to cart!`;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.classList.add('show');
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 2000);
+    }, 10);
+  };
+
   return (
     <div className="product-showcase">
       <h2 className="showcase-title">Featured Products</h2>
@@ -196,8 +236,11 @@ const ProductShowcase = () => {
                 <h3 className="product-title">{product.title}</h3>
                 <p className="product-price">{convertPrice(product.basePrice, currentCurrency)}</p>
                 <div className="product-actions">
-                  <button className="add-to-cart-btn">
-                    <i className="fas fa-shopping-cart"></i> Add to Cart
+                  <button 
+                    className="add-to-cart-btn"
+                    onClick={() => addToCart(product)}
+                  >
+                    <FontAwesomeIcon icon={faShoppingCart} /> Add to Cart
                   </button>
                 </div>
               </div>

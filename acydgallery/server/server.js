@@ -4,21 +4,31 @@ const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 require('dotenv').config();
+
+// Import domain configuration
+const domainConfig = require('./domain-config');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const isProduction = process.env.NODE_ENV === 'production';
+
+// CORS configuration based on environment
+const corsOptions = isProduction 
+  ? domainConfig.corsOptions 
+  : {
+      origin: function(origin, callback) {
+        // Allow any origin during development
+        callback(null, true);
+      },
+      credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization']
+    };
 
 // Middleware
-app.use(cors({
-  origin: function(origin, callback) {
-    // Allow any origin during development
-    callback(null, true);
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -462,7 +472,29 @@ app.get('/api/users/:id/orders', authenticateToken, async (req, res) => {
   }
 });
 
+// Domain status endpoint
+app.get('/api/domain-status', (req, res) => {
+  res.json({
+    domain: process.env.DOMAIN,
+    environment: process.env.NODE_ENV,
+    isProduction: isProduction,
+    status: 'configured but not live'
+  });
+});
+
+// If in production, serve static files from the build directory
+if (isProduction) {
+  // Serve static files from the React app build directory
+  app.use(express.static(path.join(__dirname, '../build')));
+
+  // For any request that doesn't match an API route, send the React app
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../build', 'index.html'));
+  });
+}
+
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running in ${isProduction ? 'production' : 'development'} mode on port ${PORT}`);
+  console.log(`Domain: ${isProduction ? process.env.DOMAIN : 'localhost'}`);
 }); 

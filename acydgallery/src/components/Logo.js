@@ -1,11 +1,13 @@
 import React from 'react';
-import './styles/styles.css';
-
+import { Link } from 'react-router-dom';
+import './styles/logo.css';
 
 const Logo = () => {
     return (
         <div className='logo'>
-            <img className='acydgallery' src={'/imgs/WORKINGACYDLOGO.png'} alt="ACYD Gallery Logo" />
+            <Link to="/">
+                <img className='acydgallery' src={'/imgs/invertedacyd-removebg-preview.png'} alt="ACYD Gallery Logo" />
+            </Link>
         </div>
     );
 };

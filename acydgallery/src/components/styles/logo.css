@@ -1,0 +1,38 @@
+.logo {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  transition: all 0.3s ease;
+}
+
+.logo img.acydgallery {
+  max-width: 300px;
+  height: auto;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+}
+
+.logo img.acydgallery:hover {
+  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5));
+  transform: scale(1.02);
+}
+
+@media (max-width: 992px) {
+  .logo img.acydgallery {
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .logo img.acydgallery {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 576px) {
+  .logo img.acydgallery {
+    max-width: 180px;
+  }
+} 

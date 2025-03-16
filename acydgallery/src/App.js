@@ -6,6 +6,12 @@ import ProductShowcase from './components/Slideshow';
 import Gallery from './components/Gallery';
 import AccountPage from './components/AccountPage';
 import LoginPage from './components/LoginPage';
+import CategoryBoxes from './components/CategoryBoxes';
+import CategoryPage from './components/CategoryPage';
+import SearchResults from './components/SearchResults';
+import SearchBar from './components/SearchBar';
+import Checkout from './components/Checkout';
+import { CartProvider } from './context/CartContext';
 
 // Import Font Awesome
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -18,6 +24,7 @@ library.add(fab, fas, far);
 
 function App() {
   const [user, setUser] = useState(null);
+  const [darkMode, setDarkMode] = useState(true); // Default to dark mode
 
   useEffect(() => {
     // Check if there's a saved user session
@@ -32,6 +39,9 @@ function App() {
         sessionStorage.removeItem('user');
       }
     }
+
+    // Apply dark mode by default
+    document.body.classList.add('dark-mode');
 
     // Add scroll event listener to force re-render on scroll
     const handleScroll = () => {
@@ -60,26 +70,50 @@ function App() {
     sessionStorage.removeItem('token');
   };
 
+  // Toggle dark mode
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    if (darkMode) {
+      document.body.classList.remove('dark-mode');
+    } else {
+      document.body.classList.add('dark-mode');
+    }
+  };
+
   return (
-    <Router>
-      <div className="App">
-        <Header user={user} onLogin={handleLogin} onLogout={handleLogout} />
-        <Routes>
-          <Route path="/" element={
-            <>
-              <ProductShowcase />
-              <Gallery />
-            </>
-          } />
-          <Route path="/account" element={
-            user ? <AccountPage /> : <Navigate to="/login" />
-          } />
-          <Route path="/login" element={
-            user ? <Navigate to="/account" /> : <LoginPage onLogin={handleLogin} />
-          } />
-        </Routes>
-      </div>
-    </Router>
+    <CartProvider>
+      <Router>
+        <div className="App">
+          <Header 
+            user={user} 
+            onLogin={handleLogin} 
+            onLogout={handleLogout}
+            darkMode={darkMode}
+            toggleDarkMode={toggleDarkMode}
+          >
+            <SearchBar />
+          </Header>
+          <Routes>
+            <Route path="/" element={
+              <>
+                <ProductShowcase />
+                <CategoryBoxes />
+                <Gallery />
+              </>
+            } />
+            <Route path="/account" element={
+              user ? <AccountPage /> : <Navigate to="/login" />
+            } />
+            <Route path="/login" element={
+              user ? <Navigate to="/account" /> : <LoginPage onLogin={handleLogin} />
+            } />
+            <Route path="/category/:category" element={<CategoryPage />} />
+            <Route path="/search" element={<SearchResults />} />
+            <Route path="/checkout" element={<Checkout />} />
+          </Routes>
+        </div>
+      </Router>
+    </CartProvider>
   );
 }
 
