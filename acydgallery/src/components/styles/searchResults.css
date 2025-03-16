@@ -2,7 +2,7 @@
   background-color: #121212;
   color: #e0e0e0;
   min-height: 100vh;
-  padding: 20px 0 60px;
+  padding: 50px 0 60px;
 }
 
 .search-header {
@@ -23,7 +23,7 @@
 }
 
 .search-header h1 svg {
-  color: #888;
+  color: #940000;
 }
 
 .results-count {
@@ -178,7 +178,7 @@
 }
 
 .result-category span {
-  color: #aaa;
+  color: #940000;
   text-transform: capitalize;
 }
 
@@ -216,29 +216,30 @@
 .result-price {
   font-size: 1.4rem;
   font-weight: bold;
-  color: #e0e0e0;
+  color: #940000;
   margin: 0;
 }
 
 .add-to-cart {
   padding: 10px 20px;
-  background: linear-gradient(90deg, #333, #444);
+  background: #940000;
   border: none;
   border-radius: 4px;
-  color: #e0e0e0;
+  color: white;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .add-to-cart:hover {
-  background: linear-gradient(90deg, #444, #555);
+  background: #c00000;
+  transform: translateY(-2px);
 }
 
 /* Highlight matching text */
 .highlight {
-  background-color: rgba(245, 176, 20, 0.2);
-  color: #f5b014;
+  background-color: rgba(148, 0, 0, 0.2);
+  color: #e0e0e0;
   padding: 0 2px;
   border-radius: 2px;
 }

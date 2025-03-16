@@ -1,440 +1,304 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faSortAmountDown, faTimes, faChevronDown, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-import { useCart } from '../context/CartContext';
-import './styles/categoryPage.css';
+import { faHeart, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import './styles/styles.css';
 
 const CategoryPage = () => {
-  const { category } = useParams();
-  const location = useLocation();
-  const { dispatch } = useCart();
+  const { category, subcategory } = useParams();
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectedColors, setSelectedColors] = useState([]);
+  const [selectedSizes, setSelectedSizes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showFilters, setShowFilters] = useState(false);
-  const [filters, setFilters] = useState({
-    priceRange: [0, 1000],
-    rating: 0,
-    onSale: false,
-    sortBy: 'popularity'
-  });
-  const [expandedFilters, setExpandedFilters] = useState({
-    price: true,
-    rating: true,
-    availability: true
-  });
 
-  // Mock product data - in a real app, you would fetch this from an API
-  const mockProducts = [
-    {
-      id: 1,
-      name: 'Premium Hoodie',
-      price: 49.99,
-      image: '/imgs/place1.jpg',
-      category: 'clothing',
-      rating: 4.5,
-      onSale: false
-    },
-    {
-      id: 2,
-      name: 'Luxury Sports Car',
-      price: 199.99,
-      image: '/imgs/place2.jpg',
-      category: 'vehicles',
-      rating: 5,
-      onSale: true
-    },
-    {
-      id: 3,
-      name: 'Designer Jacket',
-      price: 79.99,
-      image: '/imgs/place3.jpg',
-      category: 'clothing',
-      rating: 4,
-      onSale: false
-    },
-    {
-      id: 4,
-      name: 'Urban Sneakers',
-      price: 89.99,
-      image: '/imgs/place1.jpg',
-      category: 'clothing',
-      rating: 3.5,
-      onSale: true
-    },
-    {
-      id: 5,
-      name: 'Classic Muscle Car',
-      price: 149.99,
-      image: '/imgs/place2.jpg',
-      category: 'vehicles',
-      rating: 4.8,
-      onSale: false
-    },
-    {
-      id: 6,
-      name: 'Tactical Vest',
-      price: 59.99,
-      image: '/imgs/place3.jpg',
-      category: 'clothing',
-      rating: 4.2,
-      onSale: true
-    },
-    {
-      id: 7,
-      name: 'Digital Artwork',
-      price: 29.99,
-      image: '/imgs/place1.jpg',
-      category: 'artwork',
-      rating: 4.7,
-      onSale: false
-    },
-    {
-      id: 8,
-      name: 'Sound Effects Pack',
-      price: 19.99,
-      image: '/imgs/place2.jpg',
-      category: 'audio',
-      rating: 4.3,
-      onSale: true
-    },
-    {
-      id: 9,
-      name: 'Game Mod Bundle',
-      price: 39.99,
-      image: '/imgs/place3.jpg',
-      category: 'gaming',
-      rating: 4.6,
-      onSale: false
-    },
-    {
-      id: 10,
-      name: 'Premium Membership',
-      price: 99.99,
-      image: '/imgs/place1.jpg',
-      category: 'premium',
-      rating: 4.9,
-      onSale: true
-    }
-  ];
-
-  // Fetch products based on category and filters
+  // Mock data - in a real app, this would come from an API
   useEffect(() => {
-    setLoading(true);
-    
     // Simulate API call
     setTimeout(() => {
-      let filteredProducts = [...mockProducts];
-      
-      // Filter by category if specified
-      if (category && category !== 'all') {
-        filteredProducts = filteredProducts.filter(product => product.category === category);
-      }
-      
-      // Apply price filter
-      filteredProducts = filteredProducts.filter(product => 
-        product.price >= filters.priceRange[0] && product.price <= filters.priceRange[1]
-      );
-      
-      // Apply rating filter
-      if (filters.rating > 0) {
-        filteredProducts = filteredProducts.filter(product => product.rating >= filters.rating);
-      }
-      
-      // Apply sale filter
-      if (filters.onSale) {
-        filteredProducts = filteredProducts.filter(product => product.onSale);
-      }
-      
-      // Apply sorting
-      switch (filters.sortBy) {
-        case 'price-low':
-          filteredProducts.sort((a, b) => a.price - b.price);
-          break;
-        case 'price-high':
-          filteredProducts.sort((a, b) => b.price - a.price);
-          break;
-        case 'rating':
-          filteredProducts.sort((a, b) => b.rating - a.rating);
-          break;
-        case 'popularity':
-        default:
-          // Assuming id is a proxy for popularity (newer items are more popular)
-          filteredProducts.sort((a, b) => b.id - a.id);
-          break;
-      }
-      
-      setProducts(filteredProducts);
+      const mockProducts = generateMockProducts(category, subcategory);
+      setProducts(mockProducts);
+      setFilteredProducts(mockProducts);
       setLoading(false);
     }, 500);
-  }, [category, filters]);
+  }, [category, subcategory]);
 
-  // Handle filter changes
-  const handleFilterChange = (filterType, value) => {
-    setFilters(prevFilters => ({
-      ...prevFilters,
-      [filterType]: value
-    }));
-  };
-
-  // Toggle filter section on mobile
-  const toggleFilters = () => {
-    setShowFilters(!showFilters);
-  };
-
-  // Toggle individual filter sections
-  const toggleFilterSection = (section) => {
-    setExpandedFilters(prev => ({
-      ...prev,
-      [section]: !prev[section]
-    }));
-  };
-
-  // Format price with currency symbol
-  const formatPrice = (price) => {
-    return `$${price.toFixed(2)}`;
-  };
-
-  // Render star ratings
-  const renderStars = (rating) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
+  // Generate mock products based on category
+  const generateMockProducts = (category, subcategory) => {
+    const mockProducts = [];
+    const count = 12; // Number of mock products to generate
     
-    for (let i = 1; i <= 5; i++) {
-      if (i <= fullStars) {
-        stars.push(<i key={i} className="fas fa-star"></i>);
-      } else if (i === fullStars + 1 && hasHalfStar) {
-        stars.push(<i key={i} className="fas fa-star-half-alt"></i>);
+    const brands = ['ACYD', 'Velocity', 'Urban Edge', 'Retro Mods', 'Pixel Perfect'];
+    const colors = ['Red', 'Blue', 'Black', 'White', 'Green', 'Yellow'];
+    const sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+    
+    for (let i = 1; i <= count; i++) {
+      const brand = brands[Math.floor(Math.random() * brands.length)];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const size = sizes[Math.floor(Math.random() * sizes.length)];
+      const price = Math.floor(Math.random() * 900) + 100; // Random price between 100 and 1000
+      
+      let name = '';
+      let image = '';
+      
+      if (category === 'cars') {
+        name = `${brand} ${['Racer', 'Cruiser', 'Drift', 'Sport', 'Classic'][Math.floor(Math.random() * 5)]} ${i}`;
+        image = `/imgs/cars/car${i % 5 + 1}.jpg`;
+      } else if (category === 'clothing') {
+        if (subcategory === 'mens') {
+          name = `${brand} Men's ${['T-Shirt', 'Hoodie', 'Jacket', 'Jeans', 'Shirt'][Math.floor(Math.random() * 5)]}`;
+          image = `/imgs/clothing/mens/item${i % 5 + 1}.jpg`;
+        } else if (subcategory === 'womens') {
+          name = `${brand} Women's ${['Dress', 'Top', 'Jeans', 'Skirt', 'Jacket'][Math.floor(Math.random() * 5)]}`;
+          image = `/imgs/clothing/womens/item${i % 5 + 1}.jpg`;
+        } else if (subcategory === 'accessories') {
+          name = `${brand} ${['Hat', 'Scarf', 'Gloves', 'Belt', 'Bag'][Math.floor(Math.random() * 5)]}`;
+          image = `/imgs/clothing/accessories/item${i % 5 + 1}.jpg`;
+        } else if (subcategory === 'footwear') {
+          name = `${brand} ${['Sneakers', 'Boots', 'Sandals', 'Loafers', 'Heels'][Math.floor(Math.random() * 5)]}`;
+          image = `/imgs/clothing/footwear/item${i % 5 + 1}.jpg`;
+        } else {
+          name = `${brand} ${['T-Shirt', 'Hoodie', 'Jacket', 'Jeans', 'Dress'][Math.floor(Math.random() * 5)]}`;
+          image = `/imgs/clothing/item${i % 5 + 1}.jpg`;
+        }
+      } else if (category === 'props') {
+        name = `${brand} ${['Furniture', 'Decoration', 'Weapon', 'Tool', 'Gadget'][Math.floor(Math.random() * 5)]} ${i}`;
+        image = `/imgs/props/prop${i % 5 + 1}.jpg`;
       } else {
-        stars.push(<i key={i} className="far fa-star"></i>);
+        name = `${brand} Item ${i}`;
+        image = `/imgs/default/item${i % 5 + 1}.jpg`;
       }
+      
+      mockProducts.push({
+        id: i,
+        name,
+        brand,
+        color,
+        size,
+        price,
+        image,
+        description: `High-quality ${category} item from ${brand}. Perfect for your collection.`
+      });
     }
     
-    return stars;
+    return mockProducts;
   };
 
-  // Get category title
-  const getCategoryTitle = () => {
-    if (!category || category === 'all') return 'All Products';
+  // Filter products based on selected filters
+  const applyFilters = () => {
+    let filtered = [...products];
+    
+    // Filter by price range
+    filtered = filtered.filter(product => 
+      product.price >= priceRange[0] && product.price <= priceRange[1]
+    );
+    
+    // Filter by brands
+    if (selectedBrands.length > 0) {
+      filtered = filtered.filter(product => 
+        selectedBrands.includes(product.brand)
+      );
+    }
+    
+    // Filter by colors
+    if (selectedColors.length > 0) {
+      filtered = filtered.filter(product => 
+        selectedColors.includes(product.color)
+      );
+    }
+    
+    // Filter by sizes
+    if (selectedSizes.length > 0) {
+      filtered = filtered.filter(product => 
+        selectedSizes.includes(product.size)
+      );
+    }
+    
+    setFilteredProducts(filtered);
+  };
+
+  // Handle price range change
+  const handlePriceChange = (e, index) => {
+    const newRange = [...priceRange];
+    newRange[index] = parseInt(e.target.value);
+    setPriceRange(newRange);
+  };
+
+  // Handle brand selection
+  const handleBrandChange = (e) => {
+    const brand = e.target.value;
+    if (e.target.checked) {
+      setSelectedBrands([...selectedBrands, brand]);
+    } else {
+      setSelectedBrands(selectedBrands.filter(b => b !== brand));
+    }
+  };
+
+  // Handle color selection
+  const handleColorChange = (e) => {
+    const color = e.target.value;
+    if (e.target.checked) {
+      setSelectedColors([...selectedColors, color]);
+    } else {
+      setSelectedColors(selectedColors.filter(c => c !== color));
+    }
+  };
+
+  // Handle size selection
+  const handleSizeChange = (e) => {
+    const size = e.target.value;
+    if (e.target.checked) {
+      setSelectedSizes([...selectedSizes, size]);
+    } else {
+      setSelectedSizes(selectedSizes.filter(s => s !== size));
+    }
+  };
+
+  // Get unique brands, colors, and sizes from products
+  const uniqueBrands = [...new Set(products.map(product => product.brand))];
+  const uniqueColors = [...new Set(products.map(product => product.color))];
+  const uniqueSizes = [...new Set(products.map(product => product.size))];
+
+  // Format category name for display
+  const formatCategoryName = () => {
+    if (subcategory) {
+      return `${subcategory.charAt(0).toUpperCase() + subcategory.slice(1)} ${category.charAt(0).toUpperCase() + category.slice(1)}`;
+    }
     return category.charAt(0).toUpperCase() + category.slice(1);
-  };
-
-  // Add to cart function
-  const addToCart = (product) => {
-    dispatch({
-      type: 'ADD_ITEM',
-      payload: product
-    });
-    
-    // Show a brief notification (you could implement a toast notification system)
-    const notification = document.createElement('div');
-    notification.className = 'add-to-cart-notification';
-    notification.textContent = `${product.name} added to cart!`;
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-      notification.classList.add('show');
-      setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => {
-          document.body.removeChild(notification);
-        }, 300);
-      }, 2000);
-    }, 10);
   };
 
   return (
     <div className="category-page">
-      <div className="category-header">
-        <h1>{getCategoryTitle()}</h1>
-        <div className="mobile-filter-toggle" onClick={toggleFilters}>
-          <FontAwesomeIcon icon={faFilter} />
-          <span>Filters</span>
+      {/* Sidebar with filters */}
+      <div className="category-sidebar">
+        <h2>{formatCategoryName()}</h2>
+        
+        {/* Price Range Filter */}
+        <div className="filter-section">
+          <h3>Price Range</h3>
+          <div className="price-range">
+            <div className="price-inputs">
+              <input 
+                type="number" 
+                value={priceRange[0]} 
+                onChange={(e) => handlePriceChange(e, 0)} 
+                min="0" 
+                max={priceRange[1]}
+              />
+              <span>to</span>
+              <input 
+                type="number" 
+                value={priceRange[1]} 
+                onChange={(e) => handlePriceChange(e, 1)} 
+                min={priceRange[0]} 
+                max="10000"
+              />
+            </div>
+            <input 
+              type="range" 
+              className="price-slider" 
+              min="0" 
+              max="1000" 
+              value={priceRange[1]} 
+              onChange={(e) => handlePriceChange(e, 1)}
+            />
+          </div>
         </div>
-      </div>
-      
-      <div className="category-content">
-        <aside className={`filters-sidebar ${showFilters ? 'show' : ''}`}>
-          <div className="filters-header">
-            <h2>Filters</h2>
-            <button className="close-filters" onClick={toggleFilters}>
-              <FontAwesomeIcon icon={faTimes} />
-            </button>
-          </div>
-          
-          <div className="filter-section">
-            <div 
-              className="filter-header" 
-              onClick={() => toggleFilterSection('price')}
-            >
-              <h3>Price Range</h3>
-              <FontAwesomeIcon 
-                icon={faChevronDown} 
-                className={expandedFilters.price ? 'expanded' : ''}
-              />
-            </div>
-            
-            {expandedFilters.price && (
-              <div className="filter-content">
-                <div className="price-inputs">
-                  <div className="price-input">
-                    <label>Min</label>
-                    <input 
-                      type="number" 
-                      value={filters.priceRange[0]}
-                      onChange={(e) => handleFilterChange('priceRange', [
-                        parseInt(e.target.value) || 0, 
-                        filters.priceRange[1]
-                      ])}
-                      min="0"
-                    />
-                  </div>
-                  <div className="price-input">
-                    <label>Max</label>
-                    <input 
-                      type="number" 
-                      value={filters.priceRange[1]}
-                      onChange={(e) => handleFilterChange('priceRange', [
-                        filters.priceRange[0], 
-                        parseInt(e.target.value) || 1000
-                      ])}
-                      min="0"
-                    />
-                  </div>
-                </div>
+        
+        {/* Brand Filter */}
+        <div className="filter-section">
+          <h3>Brands</h3>
+          <div className="filter-options">
+            {uniqueBrands.map(brand => (
+              <div className="filter-option" key={brand}>
+                <input 
+                  type="checkbox" 
+                  id={`brand-${brand}`} 
+                  value={brand} 
+                  checked={selectedBrands.includes(brand)} 
+                  onChange={handleBrandChange}
+                />
+                <label htmlFor={`brand-${brand}`}>{brand}</label>
               </div>
-            )}
+            ))}
           </div>
-          
-          <div className="filter-section">
-            <div 
-              className="filter-header" 
-              onClick={() => toggleFilterSection('rating')}
-            >
-              <h3>Rating</h3>
-              <FontAwesomeIcon 
-                icon={faChevronDown} 
-                className={expandedFilters.rating ? 'expanded' : ''}
-              />
-            </div>
-            
-            {expandedFilters.rating && (
-              <div className="filter-content">
-                <div className="rating-options">
-                  {[0, 3, 3.5, 4, 4.5].map(rating => (
-                    <div 
-                      key={rating} 
-                      className={`rating-option ${filters.rating === rating ? 'selected' : ''}`}
-                      onClick={() => handleFilterChange('rating', rating)}
-                    >
-                      {rating === 0 ? (
-                        <span>Any Rating</span>
-                      ) : (
-                        <>
-                          <span className="stars">{renderStars(rating)}</span>
-                          <span>& Up</span>
-                        </>
-                      )}
-                    </div>
-                  ))}
-                </div>
+        </div>
+        
+        {/* Color Filter */}
+        <div className="filter-section">
+          <h3>Colors</h3>
+          <div className="filter-options">
+            {uniqueColors.map(color => (
+              <div className="filter-option" key={color}>
+                <input 
+                  type="checkbox" 
+                  id={`color-${color}`} 
+                  value={color} 
+                  checked={selectedColors.includes(color)} 
+                  onChange={handleColorChange}
+                />
+                <label htmlFor={`color-${color}`}>{color}</label>
               </div>
-            )}
+            ))}
           </div>
-          
+        </div>
+        
+        {/* Size Filter (only for clothing) */}
+        {category === 'clothing' && (
           <div className="filter-section">
-            <div 
-              className="filter-header" 
-              onClick={() => toggleFilterSection('availability')}
-            >
-              <h3>Availability</h3>
-              <FontAwesomeIcon 
-                icon={faChevronDown} 
-                className={expandedFilters.availability ? 'expanded' : ''}
-              />
-            </div>
-            
-            {expandedFilters.availability && (
-              <div className="filter-content">
-                <div className="checkbox-option">
+            <h3>Sizes</h3>
+            <div className="filter-options">
+              {uniqueSizes.map(size => (
+                <div className="filter-option" key={size}>
                   <input 
                     type="checkbox" 
-                    id="onSale" 
-                    checked={filters.onSale}
-                    onChange={(e) => handleFilterChange('onSale', e.target.checked)}
+                    id={`size-${size}`} 
+                    value={size} 
+                    checked={selectedSizes.includes(size)} 
+                    onChange={handleSizeChange}
                   />
-                  <label htmlFor="onSale">On Sale</label>
+                  <label htmlFor={`size-${size}`}>{size}</label>
                 </div>
-              </div>
-            )}
-          </div>
-          
-          <div className="filter-section">
-            <div className="filter-header">
-              <h3>Sort By</h3>
-            </div>
-            <div className="filter-content">
-              <select 
-                value={filters.sortBy}
-                onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-                className="sort-select"
-              >
-                <option value="popularity">Popularity</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-                <option value="rating">Rating</option>
-              </select>
+              ))}
             </div>
           </div>
-        </aside>
+        )}
         
-        <div className="products-grid">
-          {loading ? (
-            <div className="loading">
-              <div className="spinner"></div>
-              <p>Loading products...</p>
-            </div>
-          ) : products.length === 0 ? (
-            <div className="no-products">
-              <p>No products found matching your criteria.</p>
-              <button 
-                onClick={() => setFilters({
-                  priceRange: [0, 1000],
-                  rating: 0,
-                  onSale: false,
-                  sortBy: 'popularity'
-                })}
-                className="reset-filters"
-              >
-                Reset Filters
-              </button>
-            </div>
-          ) : (
-            products.map(product => (
-              <div key={product.id} className="product-card">
-                <div className="product-image">
-                  <img src={product.image} alt={product.name} />
-                  {product.onSale && <span className="sale-badge">SALE</span>}
-                </div>
-                <div className="product-details">
-                  <h3 className="product-name">{product.name}</h3>
-                  <div className="product-rating">
-                    <span className="stars">{renderStars(product.rating)}</span>
-                    <span className="rating-value">({product.rating})</span>
+        <button className="filter-button" onClick={applyFilters}>Apply Filters</button>
+      </div>
+      
+      {/* Main content with products */}
+      <div className="category-content">
+        <h2>{filteredProducts.length} Products</h2>
+        
+        {loading ? (
+          <div className="loading">Loading products...</div>
+        ) : filteredProducts.length === 0 ? (
+          <div className="no-products">No products found matching your filters.</div>
+        ) : (
+          <div className="products-grid">
+            {filteredProducts.map(product => (
+              <div className="product-card" key={product.id}>
+                <img src={product.image} alt={product.name} className="product-image" />
+                <div className="product-info">
+                  <h3 className="product-title">{product.name}</h3>
+                  <p className="product-price">${product.price}</p>
+                  <p className="product-description">{product.description}</p>
+                  <div className="product-actions">
+                    <button className="add-to-cart">
+                      <FontAwesomeIcon icon={faShoppingCart} /> Add to Cart
+                    </button>
+                    <button className="wishlist-button">
+                      <FontAwesomeIcon icon={faHeart} />
+                    </button>
                   </div>
-                  <p className="product-price">{formatPrice(product.price)}</p>
-                  <button 
-                    className="add-to-cart-btn" 
-                    onClick={() => addToCart(product)}
-                  >
-                    <FontAwesomeIcon icon={faShoppingCart} /> Add to Cart
-                  </button>
                 </div>
               </div>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

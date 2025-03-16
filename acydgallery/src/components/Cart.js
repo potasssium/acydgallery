@@ -5,7 +5,7 @@ import { faShoppingCart, faTimes, faTrash, faPlus, faMinus } from '@fortawesome/
 import { useCart } from '../context/CartContext';
 import './styles/cart.css';
 
-const Cart = () => {
+const Cart = ({ isFixed }) => {
   const { state, dispatch } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const cartRef = useRef(null);
@@ -40,59 +40,69 @@ const Cart = () => {
     };
   }, [isOpen]);
 
+  // Close cart when scrolling
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isOpen) {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isOpen]);
+
   // Toggle cart visibility
-  const toggleCart = () => {
+  const toggleCart = (e) => {
+    e.stopPropagation(); // Prevent event bubbling
     setIsOpen(!isOpen);
   };
 
   // Add item to cart
   const addItem = (item) => {
     dispatch({
-      type: 'ADD_ITEM',
-      payload: item,
+      type: 'ADD_TO_CART',
+      payload: item
     });
   };
 
   // Remove item from cart
   const removeItem = (item) => {
     dispatch({
-      type: 'REMOVE_ITEM',
-      payload: item,
+      type: 'REMOVE_FROM_CART',
+      payload: item
     });
   };
 
   // Delete item from cart
   const deleteItem = (item) => {
     dispatch({
-      type: 'DELETE_ITEM',
-      payload: item,
+      type: 'DELETE_FROM_CART',
+      payload: item
     });
   };
 
-  // Clear the entire cart
+  // Clear cart
   const clearCart = () => {
     dispatch({
-      type: 'CLEAR_CART',
+      type: 'CLEAR_CART'
     });
   };
 
-  // Update item quantity directly
+  // Update item quantity
   const updateQuantity = (id, quantity) => {
     dispatch({
       type: 'UPDATE_QUANTITY',
-      payload: { id, quantity },
+      payload: { id, quantity }
     });
   };
 
-  // Proceed to checkout
+  // Handle checkout
   const handleCheckout = () => {
-    if (state.items.length === 0) return;
-    
-    // Close the cart
-    setIsOpen(false);
-    
-    // Navigate to checkout page
     navigate('/checkout');
+    setIsOpen(false);
   };
 
   return (

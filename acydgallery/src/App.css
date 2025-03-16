@@ -9,24 +9,27 @@ body {
   font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
   line-height: 1.6;
   color: #e0e0e0;
-  background-color: #f5f5f5;
+  background-color: #121212 !important;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body.dark-mode {
-  background-color: #121212;
+  background-color: #121212 !important;
   color: #e0e0e0;
 }
 
-.App {
+.app-container {
   text-align: center;
   min-height: 100vh;
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  background-color: #121212 !important;
 }
 
 /* Dark mode styles */
-body.dark-mode .App {
-  background: linear-gradient(135deg, #121212, #1a1a1a);
+body.dark-mode .app-container {
+  background-color: #121212 !important;
 }
 
 /* Typography */
@@ -53,13 +56,13 @@ p {
 }
 
 a {
-  color: #f0c14b;
+  color: #940000;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 a:hover {
-  color: #f8d878;
+  color: #c00000;
 }
 
 /* Buttons */
@@ -93,21 +96,34 @@ button:hover, .btn:hover {
 
 /* Header styles */
 .header {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 250px; /* Increased height to accommodate navbar below logo */
-  background: linear-gradient(to bottom, #1a1a1a, #121212);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
+  height: 180px;
+  padding: 1rem 2rem 1rem;
+  background: #121212 !important;
+  background-color: #121212 !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  z-index: 1000;
   transition: height 0.3s ease;
-  overflow: hidden;
 }
 
 .header.scrolled {
-  height: 50px;
+  height: 80px;
+  background: #121212 !important;
+  background-color: #121212 !important;
+  background-image: none !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+.header.scrolled .transparent-navbar {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 /* Header controls */
@@ -121,23 +137,34 @@ button:hover, .btn:hover {
 }
 
 .header-controls button {
-  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  background: #940000;
   border: none;
-  color: #ccc;
+  color: #fff;
   padding: 8px 12px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
   display: flex;
   align-items: center;
-  gap: 5px;
+  justify-content: center;
   transition: all 0.3s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
+.header-controls button span {
+  margin-left: 8px;
+}
+
 .header-controls button:hover {
-  color: #fff;
+  background: #c00000;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.header-controls .login-btn,
+.header-controls .account-btn,
+.header-controls .logout-btn {
+  min-width: 100px;
+  height: 40px;
 }
 
 /* Currency toggle */
@@ -175,12 +202,12 @@ button:hover, .btn:hover {
 }
 
 .theme-toggle button {
-  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  background: #940000;
   border: none;
-  color: #ccc;
+  color: #fff;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -191,7 +218,7 @@ button:hover, .btn:hover {
 }
 
 .theme-toggle button:hover {
-  color: #fff;
+  background: #c00000;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
@@ -199,7 +226,7 @@ button:hover, .btn:hover {
 .header-search {
   position: absolute;
   top: 20px;
-  right: 180px; /* Positioned to the left of the header controls */
+  right: 180px;
   z-index: 10;
   width: 300px;
 }
@@ -207,17 +234,71 @@ button:hover, .btn:hover {
 /* Logo */
 .logo {
   position: absolute;
-  top: 40%; /* Adjusted to be slightly higher */
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 5;
   transition: all 0.3s ease;
 }
 
+.logo.scrolled-logo {
+  top: 50%;
+  left: 100px;
+  transform: translate(0, -50%);
+}
+
 .logo img.acydgallery {
   max-width: 300px;
   height: auto;
   transition: transform 0.3s ease;
+}
+
+/* Transparent Navbar */
+.transparent-navbar {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Logo gradient background for fixed navbar */
+.logo-gradient-background {
+  background: linear-gradient(45deg, #940000, #ff0000, #940000);
+  background-size: 200% 200%;
+  animation: gradient 5s ease infinite;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(148, 0, 0, 0.5);
+}
+
+/* Fixed Navbar */
+.fixed-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background-color: rgba(0, 0, 0, 0.95);
+  z-index: 1000;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.fixed-navbar.visible {
+  transform: translateY(0);
+}
+
+/* Animation for gradient background */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Container */
@@ -237,9 +318,11 @@ button:hover, .btn:hover {
   text-align: center;
   margin-bottom: 40px;
   position: relative;
-  color: #f0c14b;
+  color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 2px;
+  font-size: 28px;
+  font-weight: 700;
 }
 
 .section-title::after {
@@ -250,9 +333,188 @@ button:hover, .btn:hover {
   transform: translateX(-50%);
   width: 80px;
   height: 3px;
-  background: linear-gradient(90deg, 
-              rgba(255, 215, 0, 0.7), 
-              rgba(255, 140, 0, 0.7));
+  background: #940000;
+}
+
+/* Main Content */
+.main-content {
+  margin-top: 180px;
+  min-height: calc(100vh - 180px);
+  position: relative;
+  z-index: 1;
+  padding-top: 0;
+  background: #121212 !important;
+  border-radius: 20px 20px 0 0;
+  overflow: visible;
+}
+
+/* Adjust spacing for non-homepage pages */
+body:not([data-page="home"]) .main-content {
+  margin-top: 70px; /* Match the height of the fixed navbar */
+}
+
+/* Add spacing for non-homepage routes */
+.page-content {
+  margin-top: 150px;
+  padding: 0 20px;
+}
+
+/* Adjust spacing for non-homepage pages */
+body:not([data-page="home"]) .page-content {
+  margin-top: 50px; /* Less margin needed since we already have the fixed navbar */
+}
+
+/* Hero Section */
+.hero-section {
+  margin: 0 auto 2rem;
+  width: 100%;
+  max-width: 1400px;
+  position: relative;
+  overflow: visible;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: transparent;
+  z-index: 2;
+  height: auto;
+  padding: 0;
+  min-height: 500px;
+}
+
+/* Remove the gradient at the top of the hero section */
+.hero-section::before {
+  display: none;
+}
+
+/* Categories Section */
+.categories-section {
+  width: 100%;
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
+
+/* Featured Section */
+.featured-section {
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.featured-section .section-title {
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.featured-section .section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: #940000;
+  border-radius: 3px;
+}
+
+/* Footer Styles */
+.main-footer {
+  background: #121212 !important;
+  color: #e0e0e0;
+  padding: 3rem 1rem 1rem;
+  margin-top: auto;
+  box-shadow: none !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 2rem;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 250px;
+  text-align: left;
+}
+
+.footer-section h3 {
+  color: #fff;
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.footer-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 2px;
+  background: #940000;
+  border-radius: 2px;
+}
+
+.footer-section p {
+  color: #aaa;
+  margin-bottom: 0.5rem;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-section ul li a {
+  color: #aaa;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+  color: #940000;
+  text-decoration: none;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  margin-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-bottom p {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+/* Remove the top navbar styles */
+/* Top Navbar */
+.top-navbar {
+  display: none;
+}
+
+.top-navbar-container,
+.top-navbar-links,
+.top-navbar-links ul,
+.top-navbar-links ul li,
+.top-navbar-links ul li a {
+  display: none;
+}
+
+/* Bottom Navbar */
+.bottom-navbar {
+  display: none;
 }
 
 /* Responsive adjustments */
@@ -268,6 +530,24 @@ button:hover, .btn:hover {
   
   .header {
     height: 220px;
+  }
+  
+  .main-content {
+    padding-top: 0;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .footer-section {
+    text-align: center;
+  }
+  
+  .footer-section h3::after {
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 
@@ -287,6 +567,10 @@ button:hover, .btn:hover {
   
   .header {
     height: 200px;
+  }
+  
+  .main-content {
+    padding-top: 0;
   }
 }
 
@@ -319,6 +603,10 @@ button:hover, .btn:hover {
   
   .header {
     height: 180px;
+  }
+  
+  .main-content {
+    padding-top: 0;
   }
 }
 

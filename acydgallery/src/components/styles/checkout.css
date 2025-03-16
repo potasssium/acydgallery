@@ -197,7 +197,7 @@
 }
 
 .place-order-btn {
-  background: linear-gradient(145deg, #ff4500, #ff6347);
+  background: #940000;
   color: white;
   border: none;
   border-radius: 4px;
@@ -210,9 +210,9 @@
 }
 
 .place-order-btn:hover {
-  background: linear-gradient(145deg, #ff6347, #ff7f50);
+  background: #c00000;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(255, 69, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(148, 0, 0, 0.3);
 }
 
 .place-order-btn:disabled {
@@ -380,22 +380,24 @@
 }
 
 .continue-shopping-btn {
-  background: linear-gradient(145deg, #333333, #444444);
-  color: #e0e0e0;
+  background: #940000;
+  color: white;
   border: none;
   border-radius: 4px;
   padding: 12px 25px;
-  margin-top: 20px;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  display: inline-block;
+  text-decoration: none;
+  margin-top: 20px;
 }
 
 .continue-shopping-btn:hover {
-  background: linear-gradient(145deg, #444444, #555555);
+  background: #c00000;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(148, 0, 0, 0.3);
 }
 
 /* Responsive Design */

@@ -7,10 +7,10 @@
 /* Cart Toggle Button */
 .cart-toggle {
   position: relative;
-  background: linear-gradient(145deg, #2a2a2a, #333333);
-  color: #e0e0e0;
+  background: #940000;
+  color: #fff;
   border: none;
-  border-radius: 50%;
+  border-radius: 4px;
   width: 40px;
   height: 40px;
   display: flex;
@@ -22,9 +22,21 @@
 }
 
 .cart-toggle:hover {
-  background: linear-gradient(145deg, #333333, #3a3a3a);
+  background: #c00000;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Fixed navbar cart toggle */
+.fixed-navbar .cart-toggle {
+  background: #940000;
+  border: none;
+  box-shadow: none;
+}
+
+.fixed-navbar .cart-toggle:hover {
+  background: #c00000;
+  transform: translateY(-2px);
 }
 
 /* Cart Badge */
@@ -32,7 +44,7 @@
   position: absolute;
   top: -8px;
   right: -8px;
-  background: linear-gradient(145deg, #ff4500, #ff6347);
+  background: #000;
   color: white;
   border-radius: 50%;
   width: 20px;
@@ -51,12 +63,11 @@
   top: 0;
   right: -400px;
   width: 380px;
-  max-width: 90vw;
   height: 100vh;
-  background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+  background: linear-gradient(145deg, #1e1e1e, #252525);
   box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
   transition: right 0.3s ease;
-  z-index: 1001;
+  z-index: 1100; /* Higher than other elements */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -305,8 +316,9 @@
   background: linear-gradient(145deg, #444444, #555555);
 }
 
+/* Checkout button */
 .checkout-button {
-  background: linear-gradient(145deg, #ff4500, #ff6347);
+  background: #940000;
   color: white;
   border: none;
   border-radius: 4px;
@@ -318,7 +330,7 @@
 }
 
 .checkout-button:hover {
-  background: linear-gradient(145deg, #ff6347, #ff7f50);
+  background: #c00000;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }

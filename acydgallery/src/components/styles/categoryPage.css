@@ -30,28 +30,29 @@
   left: 0;
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg, #444, #888, #444);
+  background: #940000;
 }
 
 .mobile-filter-toggle {
   display: none;
   align-items: center;
-  background: linear-gradient(145deg, #1a1a1a, #222);
+  background: #940000;
+  color: white;
   padding: 10px 15px;
   border-radius: 4px;
   cursor: pointer;
-  border: 1px solid #333;
+  border: 1px solid #940000;
   transition: all 0.3s ease;
 }
 
 .mobile-filter-toggle:hover {
-  background: linear-gradient(145deg, #222, #2a2a2a);
-  border-color: #444;
+  background: #c00000;
+  border-color: #c00000;
 }
 
 .mobile-filter-toggle svg {
   margin-right: 8px;
-  color: #888;
+  color: white;
 }
 
 .category-content {
@@ -385,51 +386,41 @@
 }
 
 .reset-filters {
-  margin-top: 15px;
-  padding: 10px 20px;
-  background: linear-gradient(90deg, #333, #444);
+  background-color: #940000;
+  color: white;
   border: none;
+  padding: 8px 15px;
   border-radius: 4px;
-  color: #e0e0e0;
   cursor: pointer;
+  font-weight: 500;
+  margin-top: 15px;
   transition: all 0.3s ease;
 }
 
 .reset-filters:hover {
-  background: linear-gradient(90deg, #444, #555);
+  background-color: #c00000;
+  transform: translateY(-2px);
 }
 
 /* Add to Cart Button */
 .add-to-cart-btn {
-  width: 100%;
-  padding: 10px 15px;
-  background: linear-gradient(145deg, #333333, #444444);
-  color: #e0e0e0;
+  background-color: #940000;
+  color: white;
   border: none;
+  padding: 8px 15px;
   border-radius: 4px;
-  margin-top: 10px;
   cursor: pointer;
+  font-weight: 500;
+  width: 100%;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  font-weight: 600;
 }
 
 .add-to-cart-btn:hover {
-  background: linear-gradient(145deg, #444444, #555555);
+  background-color: #c00000;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-mode .add-to-cart-btn {
-  background: linear-gradient(145deg, #ff4500, #ff6347);
-  color: white;
-}
-
-body.dark-mode .add-to-cart-btn:hover {
-  background: linear-gradient(145deg, #ff6347, #ff7f50);
 }
 
 /* Add to Cart Notification */
